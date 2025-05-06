@@ -1,29 +1,53 @@
-using UnityEditor;
 using UnityEngine;
 
-public class AzimuthPlane : MonoBehaviour
+public class AzimuthPlane : AudioPlane
 {
     // Colors
     public Color circleColor = Color.red;
-    public Color rayColor = Color.yellow;
 
     // Circle
-    public int segments = 12;
+    private int _segments;
     public float radius = 5f;
+    private Vector3 _firstPoint, _prevPoint, _newPoint;
 
-    // Rays
-    public int raysPerStep = 4;
-    private float _angleBetweenRays; //For each step
-    private float _baseAngle = 0f;
+    // Angles
+    private float _incrementAngle;  //Angle is incremented when changing step
+    
+    // Options
+    public bool maximaAzimuth = false;
 
     private void Start()
     {
-        _angleBetweenRays = 360f / segments;
+        _segments = steps * rays;
+        _incrementAngle = 360f / _segments;         //360 / 12 = 30 (Angle to increment in each step)
+        rayAngle = 360f / rays;                     //30 * 4 = 120 (Angle between each ray)
+
+        origins = new Vector3[rays];
+        origins = GetRayOrigins();
+
+        //Debug.Log("Increment angle: " + _incrementAngle);
+        //Debug.Log("Ray angle: " + _rayAngle);
     }
+
     private void Update()
     {
-        _baseAngle += 1f;
-        if (_baseAngle >= 360f) _baseAngle -= 360f;
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            Debug.Log("Current step: " + currentStep);
+
+            DrawRay(origins);
+            CalculateStepAverage();
+            baseAngle += _incrementAngle;
+            currentStep++;
+
+            if (currentStep == steps)
+            {
+                radius = CalculateAverageDistance();
+                Debug.Log("Radius: " + radius);
+
+                ResetStep();
+            }
+        }
     }
 
     private void OnDrawGizmos()
@@ -32,46 +56,48 @@ public class AzimuthPlane : MonoBehaviour
 
         Gizmos.color = circleColor;
         DrawCircle();
-
-        Gizmos.color = rayColor;
-        DrawRay();
-        
     }
 
+    // Horizontal Plane Exclusive
     private void DrawCircle() 
     {
-        Vector3 firstPoint = CalculatePoint(0f);
-        Vector3 prevPoint = firstPoint;
-        Vector3 newPoint;
-        float angle;
+        _firstPoint = transform.position + GetDirection(0f) * radius;
+        _prevPoint = _firstPoint;
 
-        for (int i = 1; i <= segments; i++)
+        for (int i = 1; i <= _segments; i++)
         {
-            angle = _angleBetweenRays * i * Mathf.Deg2Rad;
-            newPoint = CalculatePoint(angle);
-            Gizmos.DrawLine(prevPoint, newPoint);
-            prevPoint = newPoint;
+            currentAngle = _incrementAngle * i * Mathf.Deg2Rad;
+            _newPoint = transform.position + GetDirection(currentAngle) * radius;
+            Gizmos.DrawLine(_prevPoint, _newPoint);
+            _prevPoint = _newPoint;
         }
 
-        Gizmos.DrawLine(prevPoint, firstPoint);
+        Gizmos.DrawLine(_prevPoint, _firstPoint);
     }
 
-    private void DrawRay()
+    protected override Vector3[] GetRayOrigins()
     {
-        float stepAngle = _angleBetweenRays * 4;            // 30 * 4 = 120°
+        for (int i = 0; i < rays; i++)
+            origins[i] = transform.position;
 
-        for (int i = 0; i < 3; i++)
-        {
-            float currentAngle = _baseAngle + i * stepAngle;
-            float rad = currentAngle * Mathf.Deg2Rad;
-
-            Vector3 direction = new Vector3(Mathf.Cos(rad), 0f, Mathf.Sin(rad));
-            Gizmos.DrawRay(transform.position, direction * radius);
-        }
+        return origins;
     }
-    
-    private Vector3 CalculatePoint(float angle)
+
+    // Horizontal Plane Exclusive
+    protected override Vector3 GetDirection(float angle)
     {
-        return transform.position + new Vector3(Mathf.Cos(angle), 0f, Mathf.Sin(angle)) * radius;
+        return GetHorizontalDirection(angle);
     }
+
+    // Horizontal Plane Exclusive
+    protected override void CalculateStepAverage()
+    {
+        if (maximaAzimuth)
+            averageDistances[currentStep] = (stepDistances[1] + stepDistances[2]) / 2f;
+        else
+            averageDistances[currentStep] = (stepDistances[0] + stepDistances[1]) / 2f;
+
+        Debug.Log("Step distance: " + averageDistances[currentStep]);
+    }
+
 }
