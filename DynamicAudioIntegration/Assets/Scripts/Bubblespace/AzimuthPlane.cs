@@ -23,7 +23,7 @@ public class AzimuthPlane : AudioPlane
         rayAngle = 360f / rays;                     //30 * 4 = 120 (Angle between each ray)
 
         origins = new Vector3[rays];
-        origins = GetRayOrigins();
+        //origins = GetRayOrigins();
 
         //Debug.Log("Increment angle: " + _incrementAngle);
         //Debug.Log("Ray angle: " + _rayAngle);
@@ -35,7 +35,7 @@ public class AzimuthPlane : AudioPlane
         {
             Debug.Log("Current step: " + currentStep);
 
-            DrawRay(origins);
+            DrawRay(GetRayOrigins());
             CalculateStepAverage();
             baseAngle += _incrementAngle;
             currentStep++;

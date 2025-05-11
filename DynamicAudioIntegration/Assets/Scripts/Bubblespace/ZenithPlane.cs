@@ -18,7 +18,7 @@ public class ZenithPlane : AudioPlane
     {
         rayAngle = 360f / rays;
         origins = new Vector3[rays];
-        origins = GetRayOrigins();
+        //origins = GetRayOrigins();
     }
 
     void Update()
@@ -28,9 +28,9 @@ public class ZenithPlane : AudioPlane
             Debug.Log("Current step: " + currentStep);
 
             //Only to debug while not applied to Player
-            if (currentStep == 0) origins = GetRayOrigins(); 
+            //if (currentStep == 0) origins = GetRayOrigins(); 
 
-            DrawRay(origins);
+            DrawRay(GetRayOrigins());
             CalculateStepAverage();
             currentStep++;
 

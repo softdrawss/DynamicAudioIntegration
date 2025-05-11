@@ -21,6 +21,7 @@ public class AudioPlane : MonoBehaviour
     protected Vector3 direction;
     public float maxDistance = 20f;
     public int rays = 3;
+    private Ray ray;
 
     // Buffers
     protected float[] stepDistances = new float[3];
@@ -36,7 +37,7 @@ public class AudioPlane : MonoBehaviour
 
             direction = GetDirection(currentAngle);
 
-            Ray ray = new Ray(origins[i], direction);
+            ray = new Ray(origins[i], direction);
 
             if (Physics.Raycast(ray, out RaycastHit hit, maxDistance))
             {
