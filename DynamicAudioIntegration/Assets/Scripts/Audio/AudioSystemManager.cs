@@ -10,8 +10,8 @@ public class AudioSystemManager : MonoBehaviour
     public Transform playerTransform;
 
     // Audio Planes
-    private AzimuthPlane _azimuthPlane;
-    private ZenithPlane _zenithPlane;
+    public AzimuthPlane _azimuthPlane;
+    public ZenithPlane _zenithPlane;
     
     // Audio Source Systems
     public AudioSourceSystem[] audioSourceSystems;
@@ -21,9 +21,9 @@ public class AudioSystemManager : MonoBehaviour
     public float verticalBound;
 
     // Snaphots
-    public AudioMixerSnapshot smallSmallSnapshot;     //Small width + small height
+    public AudioMixerSnapshot smallSmallSnapshot;       //Small width + small height
     public AudioMixerSnapshot largeLargeSnapshot;        //Large width + large height
-    public AudioMixerSnapshot smallLargeSnapshot;    //Small width + large height
+    public AudioMixerSnapshot smallLargeSnapshot;       //Small width + large height
     public AudioMixerSnapshot largeSmallSnapshot;       //Large width + small height
 
     // Reverb Zone
@@ -57,7 +57,8 @@ public class AudioSystemManager : MonoBehaviour
         _zenithPlane.HandlePlane();
 
         foreach (AudioSourceSystem audioSourceSystem in audioSourceSystems) {
-            audioSourceSystem.HandleAudioBehaviour();
+            if (audioSourceSystem != null)
+                audioSourceSystem.HandleAudioBehaviour();
         }
 
         HandleAudioEffects();
@@ -65,40 +66,68 @@ public class AudioSystemManager : MonoBehaviour
 
     private void HandleAudioEffects()
     {
-        float azimuth = _azimuthPlane.GetAzimuth();  // Width around player
-        float zenith = _zenithPlane.GetZenith();     // Height above player
-
         // Determine which "space" the player is in
-        bool isHorizontalLarge = azimuth > horizontalBound;
-        bool isVerticalLarge = zenith > verticalBound;
+        bool isHorizontalLarge = _azimuthPlane.GetAzimuth() > horizontalBound;
+        bool isVerticalLarge = _zenithPlane.GetZenith() > verticalBound;
 
         // Select appropriate snapshot + reverb based on space type
         if (!isHorizontalLarge && !isVerticalLarge)
         {
             // Small width + small height
-            smallSmallSnapshot.TransitionTo(1.0f);
-            _audioReverbFilter.reverbPreset = AudioReverbPreset.Bathroom;
+            smallSmallSnapshot.TransitionTo(0.2f);
+
+            _audioReverbFilter.reverbPreset = AudioReverbPreset.SewerPipe;
+            //_audioReverbFilter.decayTime = 0.5f;
+            //_audioReverbFilter.reflectionsLevel = -200f;
+            //_audioReverbFilter.reverbLevel = -1000f;
+            //_audioReverbFilter.roomHF = -100f;
+            //_audioReverbFilter.diffusion = 0.8f;
+            //_audioReverbFilter.density = 1.0f;
+
             Debug.Log("Small small");
         }
         else if (isHorizontalLarge && isVerticalLarge)
         {
             // Large width + large height
-            largeLargeSnapshot.TransitionTo(1.0f);
-            _audioReverbFilter.reverbPreset = AudioReverbPreset.Cave;
+            largeLargeSnapshot.TransitionTo(0.2f);
+
+            _audioReverbFilter.reverbPreset = AudioReverbPreset.PaddedCell;
+            //_audioReverbFilter.decayTime = 3.25f;
+            //_audioReverbFilter.reflectionsLevel = -1500f;
+            //_audioReverbFilter.reverbLevel = -1500f;
+            //_audioReverbFilter.roomHF = -4000f;
+            //_audioReverbFilter.diffusion = 0.7f;
+            //_audioReverbFilter.density = 0.5f;
+
             Debug.Log("Large Large");
         }
         else if (!isHorizontalLarge && isVerticalLarge)
         {
             // Small width + large height
-            smallLargeSnapshot.TransitionTo(1.0f);
-            _audioReverbFilter.reverbPreset = AudioReverbPreset.Auditorium;
+            smallLargeSnapshot.TransitionTo(0.2f);
+
+            _audioReverbFilter.reverbPreset = AudioReverbPreset.Room;
+            //_audioReverbFilter.decayTime = 1.85f;
+            //_audioReverbFilter.reflectionsLevel = -500f;
+            //_audioReverbFilter.reverbLevel = -700f;
+            //_audioReverbFilter.roomHF = -1000f;
+            //_audioReverbFilter.diffusion = 0.8f;
+            //_audioReverbFilter.density = 0.8f;
+
             Debug.Log("Small large");
         }
         else if (isHorizontalLarge && !isVerticalLarge)
         {
             // Large width + small height
-            largeSmallSnapshot.TransitionTo(1.0f);
-            _audioReverbFilter.reverbPreset = AudioReverbPreset.ParkingLot;
+            largeSmallSnapshot.TransitionTo(0.2f);
+
+            _audioReverbFilter.reverbPreset = AudioReverbPreset.Livingroom;
+            //_audioReverbFilter.decayTime = 2.15f;
+            //_audioReverbFilter.reflectionsLevel = -800f;
+            //_audioReverbFilter.reverbLevel = -1000f;
+            //_audioReverbFilter.roomHF = -2000f;
+            //_audioReverbFilter.diffusion = 0.6f;
+            //_audioReverbFilter.density = 0.7f;
             Debug.Log("Large small");
         }
     }

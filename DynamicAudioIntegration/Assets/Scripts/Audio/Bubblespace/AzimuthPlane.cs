@@ -29,27 +29,6 @@ public class AzimuthPlane : AudioPlane
         //Debug.Log("Ray angle: " + _rayAngle);
     }
 
-    private void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            Debug.Log("Current step: " + currentStep);
-
-            DrawRay(GetRayOrigins());
-            CalculateStepAverage();
-            baseAngle += _incrementAngle;
-            currentStep++;
-
-            if (currentStep == steps)
-            {
-                _radius = CalculateAverageDistance();
-                Debug.Log("Radius: " + _radius);
-
-                ResetStep();
-            }
-        }
-    }
-
     public override void HandlePlane()
     {
         DrawRay(GetRayOrigins());

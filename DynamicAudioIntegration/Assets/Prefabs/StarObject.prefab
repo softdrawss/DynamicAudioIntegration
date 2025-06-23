@@ -275,7 +275,7 @@ AudioLowPassFilter:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 1
+      value: 0.68776715
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -304,7 +304,7 @@ MonoBehaviour:
   maxDistance: 20
   rayCount: 5
   coneAngle: 40
-  unoccludedCutoff: 5500
+  unoccludedCutoff: 5000
   fullyOccludedCutoff: 300
   transitionSpeed: 1.5
   clarityCurve:

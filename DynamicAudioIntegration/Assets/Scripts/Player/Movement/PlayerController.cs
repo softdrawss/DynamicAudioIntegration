@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     // Character
     private CharacterController _characterController;
 
+    // Audio
+    private AudioSource _audioSource;
+
     // Movement
     private Vector3 _movementDirection;
     private float _velocity = 8.0f;
@@ -38,6 +41,7 @@ public class PlayerController : MonoBehaviour
         _inputSystemActions.Player.Enable();
 
         _characterController = GetComponent<CharacterController>();
+        _audioSource = GetComponent<AudioSource>();
     }
 
     private void OnDisable()
@@ -50,6 +54,8 @@ public class PlayerController : MonoBehaviour
         if (_isMoving) 
         {
             AudioSystemManager.Instance.HandleAudioSystem();
+            //if (!_audioSource.isPlaying)
+            //    _audioSource.Play();
         }
     }
 

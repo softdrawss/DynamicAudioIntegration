@@ -1,0 +1,93 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1233149941 &-1770636635735706530
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps5_{-1770636635735706530}
+  m_AudioClip: {fileID: 8300000, guid: 3b739ae55bb93ff478e1978df9e4631c, type: 3}
+  m_Volume: 0
+  m_Enabled: 1
+--- !u!1233149941 &691077881868545311
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps2_{691077881868545311}
+  m_AudioClip: {fileID: 8300000, guid: 344026865788c0348a6c88916ac02858, type: 3}
+  m_Volume: -20
+  m_Enabled: 0
+--- !u!1233149941 &1753816774521761841
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps4_{1753816774521761841}
+  m_AudioClip: {fileID: 8300000, guid: c6f3e673c40e065469daaac471304184, type: 3}
+  m_Volume: -25
+  m_Enabled: 1
+--- !u!1233149941 &4305435968490603708
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps6_{4305435968490603708}
+  m_AudioClip: {fileID: 8300000, guid: 33446fd718ec990439304c8628e79b4f, type: 3}
+  m_Volume: -30
+  m_Enabled: 1
+--- !u!1233149941 &5688323396149305202
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps1_{5688323396149305202}
+  m_AudioClip: {fileID: 8300000, guid: 21cfaab98a5130b4ead76dae60ca4327, type: 3}
+  m_Volume: -15
+  m_Enabled: 0
+--- !u!1307931743 &6418180475301049370
+AudioRandomContainer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Ratsteps
+  m_Volume: 0
+  m_Pitch: 0
+  m_AutomaticTriggerTime: 0
+  m_LoopCount: 1
+  m_VolumeRandomizationRange: {x: 0, y: 0}
+  m_PitchRandomizationRange: {x: -289.23077, y: 342.56415}
+  m_AutomaticTriggerTimeRandomizationRange: {x: 0, y: 0}
+  m_LoopCountRandomizationRange: {x: 0, y: 0}
+  m_Elements:
+  - {fileID: 5688323396149305202}
+  - {fileID: 691077881868545311}
+  - {fileID: 7121602655605359043}
+  - {fileID: 1753816774521761841}
+  - {fileID: -1770636635735706530}
+  - {fileID: 4305435968490603708}
+  m_AvoidRepeatingLast: 0
+  m_PlaybackMode: 1
+  m_TriggerMode: 1
+  m_AutomaticTriggerMode: 1
+  m_LoopMode: 0
+  m_VolumeRandomizationEnabled: 0
+  m_PitchRandomizationEnabled: 1
+  m_AutomaticTriggerTimeRandomizationEnabled: 0
+  m_LoopCountRandomizationEnabled: 0
+--- !u!1233149941 &7121602655605359043
+AudioContainerElement:
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: ratsteps3_{7121602655605359043}
+  m_AudioClip: {fileID: 8300000, guid: 5e3e92cfe153e854ab29d5c1637f7458, type: 3}
+  m_Volume: 0
+  m_Enabled: 1

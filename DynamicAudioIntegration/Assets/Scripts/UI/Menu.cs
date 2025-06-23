@@ -1,12 +1,13 @@
 using UnityEngine;
+using UnityEngine.Audio;
 
 public class Menu : MonoBehaviour
 {
     public static Menu Instance { get; private set; }
 
-    public GameObject StartMenu;
-    public GameObject PauseMenu;
-    public GameObject EndMenu;
+    public GameObject startMenu;
+    public GameObject pauseMenu;
+    public GameObject endMenu;
 
     public bool gamePaused;
 
@@ -21,9 +22,9 @@ public class Menu : MonoBehaviour
             return;
         }
 
-        StartMenu.SetActive(true);
-        PauseMenu.SetActive(false);
-        EndMenu.SetActive(false);
+        startMenu.SetActive(true);
+        pauseMenu.SetActive(false);
+        endMenu.SetActive(false);
 
         PauseGame();
     }
@@ -32,28 +33,28 @@ public class Menu : MonoBehaviour
     {
         if (NumberDisplay.Instance.currentDigit == 9)
             HandleEndMenu();
-        else if (Input.GetKeyDown(KeyCode.Escape) && !StartMenu.activeSelf)
+        else if (Input.GetKeyDown(KeyCode.Escape) && !startMenu.activeSelf)
             HandlePauseMenu();
     }
 
     private void HandlePauseMenu()
     {
-        if (PauseMenu.activeSelf)
+        if (pauseMenu.activeSelf)
         {
             PlayGame();
-            PauseMenu.SetActive(false);
+            pauseMenu.SetActive(false);
         }
         else
         {
             PauseGame();
-            PauseMenu.SetActive(true);
+            pauseMenu.SetActive(true);
         }
     }
 
     private void HandleEndMenu()
     {
         PauseGame();
-        EndMenu.SetActive(true);
+        endMenu.SetActive(true);
     }
 
     public void PlayGame()
@@ -61,6 +62,7 @@ public class Menu : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
         gamePaused = false;
+        if (endMenu.activeSelf) endMenu.SetActive(false);
     }
 
     public void PauseGame()

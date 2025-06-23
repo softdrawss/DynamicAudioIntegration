@@ -150,6 +150,8 @@ public class AudioSourceSystem : MonoBehaviour
         if (_audioSource == null)
             _audioSource = GetComponent<AudioSource>();
 
+        if (!Application.isPlaying) return;
+
         // Rays
         Gizmos.color = rayColor;
         Gizmos.DrawLine(transform.position, player.position);
