@@ -3,7 +3,6 @@ using static UnityEngine.UI.Image;
 
 public class AudioPlane : MonoBehaviour
 {
-    [Header("General Settings")]
     // Colors
     public Color rayColor = Color.yellow;
     public Color hitColor = Color.green;

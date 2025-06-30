@@ -54,8 +54,8 @@ public class PlayerController : MonoBehaviour
         if (_isMoving) 
         {
             AudioSystemManager.Instance.HandleAudioSystem();
-            //if (!_audioSource.isPlaying)
-            //    _audioSource.Play();
+            if (!_audioSource.isPlaying)
+                _audioSource.Play();
         }
     }
 

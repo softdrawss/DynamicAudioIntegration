@@ -7,7 +7,7 @@ public class AzimuthPlane : AudioPlane
 
     // Circle
     private int _segments;
-    public float _radius = 5f;
+    private float _radius = 5f;
     private Vector3 _firstPoint, _prevPoint, _newPoint;
 
     // Angles
