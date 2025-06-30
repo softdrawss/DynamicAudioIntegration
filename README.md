@@ -1,9 +1,5 @@
 # DynamicAudioIntegration
-Hi! Here is the project for Raycasting Audio.
+Repository showcasing my degree's final project. 
 
-
-## Controls
-- WASD: Movement
-- E: Horizontal plane
-- F: Vertical Plane
-- G: Audio Source System
+- If you want to see the whole project, check the repository.
+- If you want to see the scripts, go to Releases
