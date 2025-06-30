@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEngine.Audio;
+using static UnityEngine.Rendering.DebugUI.MessageBox;
 
 public class AudioSystemManagerEditorWindow : EditorWindow
 {
@@ -14,6 +15,14 @@ public class AudioSystemManagerEditorWindow : EditorWindow
     private bool _foldoutAzimuth = true;
     private bool _foldoutZenith = true;
     private bool _showDebugInfo = false;
+
+    // Icons
+    private Texture _audioSystemManagerIcon;
+    private Texture _snapshotIcon;
+    private Texture _reverbFilterIcon;
+    private Texture _audioPlayerIcon;
+    private Texture _azimuthIcon;
+    private Texture _zenithIcon;
 
     // Drop menu for Azimuth
     private string[] azimuthOptions = new string[] { "Minima", "Maxima" };
@@ -29,7 +38,9 @@ public class AudioSystemManagerEditorWindow : EditorWindow
     [MenuItem("Window/Audio System Manager")]
     public static void ShowWindow()
     {
-        GetWindow<AudioSystemManagerEditorWindow>("Audio System Manager", false);
+        var window = GetWindow<AudioSystemManagerEditorWindow>();
+        Texture2D icon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/Scripts/AudioSystem_white.png");
+        window.titleContent = new GUIContent(" Audio System Manager", icon);
     }
 
     void OnGUI()
@@ -65,8 +76,21 @@ public class AudioSystemManagerEditorWindow : EditorWindow
             return;
         }
 
-        // === Snapshot Bounds ===
-        _foldoutBounds = EditorGUILayout.BeginFoldoutHeaderGroup(_foldoutBounds, "System Bounds");
+        Undo.RecordObject(audioManager, "Modify Audio System Manager");
+
+        // Icons
+        _audioSystemManagerIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/Scripts/AudioSystem.png");
+        _snapshotIcon = EditorGUIUtility.IconContent("AudioMixerSnapshot Icon").image;
+        _reverbFilterIcon = EditorGUIUtility.IconContent("AudioReverbFilter Icon").image;
+        _audioPlayerIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/Scripts/AudioPlayer.png");
+        _azimuthIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/Scripts/AzimuthPlane.png");
+        _zenithIcon = AssetDatabase.LoadAssetAtPath<Texture2D>("Assets/Textures/Scripts/ZenithPlane.png");
+
+        // === Audio System Manager ===
+        _foldoutBounds = EditorGUI.BeginFoldoutHeaderGroup
+            (GUILayoutUtility.GetRect(new GUIContent("  System Bounds", _audioSystemManagerIcon),
+            EditorStyles.foldoutHeader), _foldoutBounds, new GUIContent("  System Bounds", _audioSystemManagerIcon), EditorStyles.foldoutHeader);
+
         if (_foldoutBounds)
         {
             EditorGUILayout.BeginVertical("box");
@@ -78,7 +102,10 @@ public class AudioSystemManagerEditorWindow : EditorWindow
 
         // === Audio Snapshots ===
         EditorGUILayout.Space(20);
-        _foldoutSnapshots = EditorGUILayout.BeginFoldoutHeaderGroup(_foldoutSnapshots, "Audio Snapshots");
+        _foldoutSnapshots = EditorGUI.BeginFoldoutHeaderGroup
+            (GUILayoutUtility.GetRect(new GUIContent("  Audio Snapshots", _snapshotIcon), 
+            EditorStyles.foldoutHeader), _foldoutSnapshots, new GUIContent("  Audio Snapshots", _snapshotIcon), EditorStyles.foldoutHeader);
+
         if (_foldoutSnapshots)
         {
             EditorGUILayout.BeginVertical("box");
@@ -98,7 +125,10 @@ public class AudioSystemManagerEditorWindow : EditorWindow
 
         // === Reverb ===
         EditorGUILayout.Space(20);
-        _foldoutReverb = EditorGUILayout.BeginFoldoutHeaderGroup(_foldoutReverb, "Reverb Filter Presets");
+        _foldoutReverb = EditorGUI.BeginFoldoutHeaderGroup
+            (GUILayoutUtility.GetRect(new GUIContent("  Reverb Filter Presets", _reverbFilterIcon),
+            EditorStyles.foldoutHeader), _foldoutReverb, new GUIContent("  Audio Snapshots", _reverbFilterIcon), EditorStyles.foldoutHeader);
+
         if (_foldoutReverb)
         {
             EditorGUILayout.BeginVertical("box");
@@ -112,7 +142,10 @@ public class AudioSystemManagerEditorWindow : EditorWindow
 
         // === Plane Settings ===
         EditorGUILayout.Space(20);
-        _foldoutPlanes = EditorGUILayout.BeginFoldoutHeaderGroup(_foldoutPlanes, "Audio Plane Settings");
+        _foldoutPlanes = EditorGUI.BeginFoldoutHeaderGroup
+                    (GUILayoutUtility.GetRect(new GUIContent("  Audio Planes", _audioPlayerIcon),
+                    EditorStyles.foldoutHeader), _foldoutPlanes, new GUIContent("  Audio Planes", _audioPlayerIcon), EditorStyles.foldoutHeader);
+
         if (_foldoutPlanes)
         {
             EditorGUILayout.BeginVertical("box");
@@ -121,7 +154,7 @@ public class AudioSystemManagerEditorWindow : EditorWindow
             audioManager.audioPlayer.useZenithPlane = EditorGUILayout.Toggle("Use Vertical Plane", audioManager.audioPlayer.useZenithPlane);
             
             EditorGUILayout.Space(10);
-            _foldoutAzimuth = EditorGUILayout.Foldout(_foldoutAzimuth, "Horitzontal / Azimuth Plane", true);
+            _foldoutAzimuth = GUILayout.Toggle(_foldoutAzimuth, new GUIContent("  Horizontal Plane", _azimuthIcon), EditorStyles.foldout);
             if (_foldoutAzimuth && audioManager._azimuthPlane != null && audioManager.audioPlayer.useAzimuthPlane)
             {
                 GUILayout.Label("Colors", EditorStyles.boldLabel);
@@ -139,10 +172,12 @@ public class AudioSystemManagerEditorWindow : EditorWindow
                 // Dropdown menu
                 azimuthOptionIndex = audioManager._azimuthPlane.maximaAzimuth ? 1 : 0;
                 azimuthOptionIndex = EditorGUILayout.Popup("Estimation", azimuthOptionIndex, azimuthOptions);
+                audioManager._azimuthPlane.maximaAzimuth = (azimuthOptionIndex == 1);
             }
 
             EditorGUILayout.Space(10);
-            _foldoutZenith = EditorGUILayout.Foldout(_foldoutAzimuth, "Vertical / Zenith Plane", true);
+            _foldoutZenith = GUILayout.Toggle(_foldoutZenith, new GUIContent("  Vertical Plane", _zenithIcon), EditorStyles.foldout);
+
             if (_foldoutZenith && audioManager._zenithPlane != null && audioManager.audioPlayer.useZenithPlane)
             {
                 GUILayout.Label("Colors", EditorStyles.boldLabel);

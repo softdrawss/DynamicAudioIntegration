@@ -24,6 +24,7 @@ public class AudioSourceSystem : MonoBehaviour
     // Occlusion
     private int _occludedRays = 0;
     private float _totalOcclusion = 0f;
+    private float _currentOcclusion;
 
     // Cutoff Frequencies
     [Header("Cutoff Frequencies")]
@@ -45,6 +46,9 @@ public class AudioSourceSystem : MonoBehaviour
     private float _clarityRatio;
     private float _curvedClarity;
 
+    // Audio material
+    private AudioMaterialComponent _audioMaterialComponent;
+
     void Start()
     {
         if (!player) return;
@@ -64,26 +68,26 @@ public class AudioSourceSystem : MonoBehaviour
             if (!Physics.Linecast(transform.position, player.position, out RaycastHit hit) || hit.transform == player)
             {
                 //Debug.Log("Sound is CLEAR");
-                HandleAudioFilter(1f);
+                _clarityRatio = 1f;
             }
             else
                 CheckSurroundings();
+
+            HandleAudioFilter(_clarityRatio);
         }
     }
 
     // Need to change behavviour so it checks materials
     private void CheckSurroundings()
     {
-
-
         for (int i = 0; i < rayCount; i++)
         {
             if (Physics.Raycast(transform.position, GetQuaternionRayDirection(i, rayCount), out RaycastHit hit, maxDistance) && hit.transform != player)
             {
-                AudioMaterialComponent audioMaterial = hit.collider.GetComponent <AudioMaterialComponent>();
-                float occlusion = audioMaterial != null ? Mathf.Clamp01(audioMaterial.material.audioOclusion) : 0.0f; // Default fallback
+                _audioMaterialComponent = hit.collider.GetComponent <AudioMaterialComponent>();
+                _currentOcclusion = _audioMaterialComponent != null ? Mathf.Clamp01(_audioMaterialComponent.material.audioOclusion) : 0.0f; // Default fallback
                 //Debug.Log("Occlusion: " + occlusion);
-                _totalOcclusion += occlusion;
+                _totalOcclusion += _currentOcclusion;
                 _occludedRays++;
             }
         }
@@ -94,7 +98,6 @@ public class AudioSourceSystem : MonoBehaviour
             _clarityRatio = 1f;
         
         //Debug.Log("Clarity ratio: " + _clarityRatio);
-        HandleAudioFilter(_clarityRatio);
     }
 
     private float GetConeAngle(int i, int rayCount) { return Mathf.Lerp(-coneAngle / 2, coneAngle / 2, (float)i / (rayCount - 1)); }
@@ -124,20 +127,22 @@ public class AudioSourceSystem : MonoBehaviour
 
         if (!Application.isPlaying) return;
 
-        // Rays
-        Gizmos.color = rayColor;
-        Gizmos.DrawLine(transform.position, player.position);
-
         // Audio Source
         Gizmos.color = audioSourceColor;
         Gizmos.DrawWireSphere(transform.position, _audioSource.maxDistance); // MAX DISTANCE
 
         if (IsInsideRange())
         {
-            for (int i = 0; i < rayCount; i++)
+            // Rays
+            Gizmos.color = rayColor;
+            Gizmos.DrawLine(transform.position, player.position);
+
+            if (_clarityRatio < 1f)
             {
-                Gizmos.color = rayColor;
-                Gizmos.DrawLine(transform.position, transform.position + GetQuaternionRayDirection(i, rayCount) * maxDistance);
+                for (int i = 0; i < rayCount; i++)
+                {
+                    Gizmos.DrawLine(transform.position, transform.position + GetQuaternionRayDirection(i, rayCount) * maxDistance);
+                }
             }
         }
     }
